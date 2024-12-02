@@ -1,0 +1,6 @@
+[submodule "BuildToolkit"]
+	path = modules/BuildToolkit
+	url = git@github.com:nikitvs/BuildToolkit.git
+[submodule "googletest"]
+	path = modules/googletest
+	url = https://github.com/google/googletest.git

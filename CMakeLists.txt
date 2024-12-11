@@ -10,5 +10,8 @@ project(CppTests
 add_subdirectory(modules/BuildToolkit)
 add_subdirectory(modules/googletest)
 
+# Глобально подключить таргет гугл тестов
+link_libraries(gtest_main)
+
 # Подключить исходники
 add_subdirectory(src)

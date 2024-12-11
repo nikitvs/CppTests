@@ -13,10 +13,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(TARGET_NAME "PureCppTests")
 
 add_executable("${TARGET_NAME}")
-target_link_libraries("${TARGET_NAME}" gtest_main)
 
 # Подключить модуль функций работы с исходниками
 include(sources_functions)
 
-# Назначить исходники таргету
-assign_sources_to_target(TARGET "${TARGET_NAME}")
+# Назначить исходники таргету (кроме директории особой сборки)
+assign_sources_to_target(TARGET "${TARGET_NAME}" EXCLUSIVE_REGEXP "special/*")
+
+# Подключить папку с экземплярами, требующими особой сборки
+add_subdirectory(special)

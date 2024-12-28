@@ -106,6 +106,9 @@ TEST(Templates, DecltypeFromExpression)
         showTypePars<decltype(arr[0])>("decltype от 'arr[0]', где arr : 'int arr[1];'");
     }
 
+    // Строковая литерала по умолчанию имеет тип "массив char" и представляет собой lvalue expression
+    showTypePars<decltype("string literal")>("decltype от \"string literal\"");
+
     std::cout << " === xvalue expression ===" << std::endl;
     std::cout << "-" << std::endl;
 

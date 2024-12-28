@@ -1,37 +1,46 @@
 #include <gtest/gtest.h>
 
-//template <class T>
-//void bar(const T& arg)
-//{
-//    std::cout << "bar lvalue: " << arg << std::endl;
-//}
+// Шаблонная функция, принимающая lvalue
+template <class T>
+void foo(const T& arg)
+{
+    std::cout << "foo lvalue: " << arg << std::endl;
+    std::cout << "-" << std::endl;
+}
 
-//template <class T>
-//void bar(const T&& arg)
-//{
-//    std::cout << "bar rvalue: " << arg << std::endl;
-//}
+// Шаблонная функция, принимающая rvalue
+template <class T>
+// Благодаря уточнению через const ломается контекст вывода типов
+// (здесь это нужно, чтобы обрабатывать только xvalue и prvalue)
+void foo(const T&& arg)
+{
+    std::cout << "foo rvalue: " << arg << std::endl;
+    std::cout << "-" << std::endl;
+}
 
-//template <class T>
-//void foo(T&& arg)
-//{
-////    bar(arg);
-////    bar(std::move(arg));
-//    bar(std::forward<T>(arg));
-//}
+// Прозрачная оболочка для одного аргумента
+template <class T>
+void transparent(T&& arg)
+{
+    foo(std::forward<T>(arg));
+}
 
-//TEST(Templates, PerfectForwarding_1)
-//{
-//    std::cout << "-" << std::endl;
-//    foo("rvalue string");
+TEST(Templates, PerfectForwarding)
+{
+    std::cout << "-" << std::endl;
 
-//    std::string a = "'std::string a'";
-//    foo(a);
+    {
+        const std::string str = "lvalue string";
+        transparent(str);
+    }
 
-//    const std::string b = "'const std::string b'";
-//    foo(b);
+    {
+        const std::string str = "xvalue string";
+        transparent(std::move(str));
+    }
 
-//    std::string& c = a;
-//    foo(c);
-//    foo(c[0]);
-//}
+    transparent(std::string{"prvalue string"});
+
+    // Строковая литерала по умолчанию имеет тип массив char и представляет собой lvalue expression
+    transparent("implicit const char[N]");
+}
